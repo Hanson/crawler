@@ -1,6 +1,7 @@
 {
     "name": "hanccc/crawler",
     "license": "MIT",
+    "keyword": ["crawl", "crawler", "spider"],
     "authors": [
         {
             "name": "HanSon",
