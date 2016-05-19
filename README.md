@@ -1,5 +1,6 @@
 # crawler
-A easy package to crawl a page site list and detail
+
+A easy package to crawl a site list and detail
 
 ## usage
 
