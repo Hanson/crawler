@@ -12,6 +12,10 @@ namespace Hanccc;
 interface ListInterface
 {
 
+    /**
+     * @param $page int
+     * @return string
+     */
     public function getEachPageUrl($page);
     
     public function setMaxPage();

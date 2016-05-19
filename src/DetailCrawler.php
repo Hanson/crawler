@@ -9,7 +9,22 @@
 namespace Hanccc;
 
 
-abstract class DetailCrawler extends Crawler implements DetailInterface
+use Goutte\Client;
+
+abstract class DetailCrawler implements DetailInterface
 {
+    use Crawler;
+
+    public function __construct()
+    {
+        $this->client = new Client();
+    }
+
+    public function start($url)
+    {
+        $this->crawl($url);
+
+        $this->handle();
+    }
 
 }

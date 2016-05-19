@@ -9,23 +9,45 @@
 namespace Hanccc;
 
 
-use GuzzleHttp\Client;
-
-class Crawler
+trait Crawler
 {
-    public $crawler;
-    
     public $client;
 
-    public function __construct($url)
-    {
-        $this->client = new Client();
-        $this->crawler = $this->client->request('get', $url);
-    }
+    public $crawler;
+    
+    public $logPath;
 
     public function crawl($url)
     {
-        $this->crawler = $this->client->request('get', $url);
+        try{
+            return $this->crawler = $this->client->request('get', $url);
+        }catch (\Exception $e){
+            $this->exceptionHandle($url, $e);
+        }
+    }
+    
+    private function getLogPath(){
+        return $this->logPath;
+    }
+
+    /**
+     * @param $url
+     * @param $e \Exception
+     * @throws \Exception
+     */
+    private function exceptionHandle($url, $e)
+    {
+        if(!$this->client->getResponse()){
+            Log::getInstance(Log::ERROR, $this->getLogPath())->addError($url . ' : ' . $e->getMessage());
+            throw new \Exception('response is null!');
+        }
+            
+        if($this->client->getResponse()->getStatus() == 200){
+            $this->crawl($url);
+            Log::getInstance(Log::DEBUG, $this->getLogPath())->addDebug($url);
+        } else{
+            Log::getInstance(Log::ERROR, $this->getLogPath())->addError($url . ' : ' . $e->getMessage());  
+        }
     }
 
 }

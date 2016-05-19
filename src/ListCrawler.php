@@ -9,39 +9,63 @@
 namespace Hanccc;
 
 
-abstract class ListCrawler extends Crawler implements ListInterface
+use Goutte\Client;
+
+abstract class ListCrawler implements ListInterface
 {
+    use Crawler;
+    
+    public $client;
 
     public $maxPage;
 
     /** @var  $detailCrawler DetailCrawler */
     public $detailCrawler;
 
-    public function setDetailCrawler(DetailCrawler $detailCrawler){
+    public function __construct($url, $logPath)
+    {
+        $this->client = new Client();
+        $this->logPath = $logPath;
+        $this->crawl($url);
+    }
+
+    public function setDetailCrawler(DetailCrawler $detailCrawler)
+    {
         $this->detailCrawler = $detailCrawler;
     }
 
-    public function iterateUrls()
+    public function start()
     {
-        for ($i = 0; $i < $this->getMaxPage(); $i++){
+        $this->setMaxPage();
+        
+        $this->iterateUrls();
+    }
+
+    private function iterateUrls()
+    {
+        for ($i = 0; $i < $this->getMaxPage(); $i++) {
             $url = $this->getEachPageUrl($i);
             $this->crawl($url);
             $this->crawlDetailUrl();
         }
     }
 
-    public function crawlDetailUrl()
+    private function crawlDetailUrl()
     {
-        $this->crawler->filter('a')->each(function ($node){
-            if($this->detailCrawler->isDetailUrl($node->link()->getUri())){
-                
+        $this->crawler->filter('a')->each(function ($node) {
+            $url = $node->link()->getUri();
+
+            if ($this->detailCrawler->isDetailUrl($url)) {
+                echo $url.PHP_EOL;
+                $this->detailCrawler->start($url);
             }
+
         });
     }
 
-    public function getMaxPage()
+    private function getMaxPage()
     {
-        if($this->maxPage < 1)
+        if ($this->maxPage < 1)
             throw new \Exception('最大页数不能小于1');
 
         return $this->maxPage;

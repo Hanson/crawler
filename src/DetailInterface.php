@@ -11,6 +11,12 @@ namespace Hanccc;
 
 interface DetailInterface
 {
+    /**
+     * @param $url string
+     * @return bool
+     */
     public function isDetailUrl($url);
+    
+    public function handle();
 
 }
