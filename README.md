@@ -2,6 +2,12 @@
 
 A easy package to crawl a site list and detail
 
+## Installation
+
+```
+composer require hanccc/crawler
+```
+
 ## usage
 
 This package require [Goutte](https://github.com/FriendsOfPHP/Goutte), you can get the dom by ```$this->crawler();``` in both of list and detail.
