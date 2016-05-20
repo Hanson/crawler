@@ -16,10 +16,13 @@ trait Crawler
     public $crawler;
     
     public $logPath;
+    
+    public $url;
 
     public function crawl($url)
     {
         try{
+            $this->url = $url;
             return $this->crawler = $this->client->request('get', $url);
         }catch (\Exception $e){
             $this->exceptionHandle($url, $e);
