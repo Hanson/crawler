@@ -12,7 +12,9 @@ composer require hanccc/crawler
 
 This package require [Goutte](https://github.com/FriendsOfPHP/Goutte), you can get the dom by ```$this->crawler();``` in both of list and detail.
 
-### ListCrawler
+### example
+
+#### ListCrawler
 list extend Hanccc/ListCrawler
 
 ```
@@ -27,7 +29,7 @@ list extend Hanccc/ListCrawler
     }
 ```
 
-### DetailCrawler
+#### DetailCrawler
 detail extend Hanccc/DetailCrawler
 
 ```
