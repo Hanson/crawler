@@ -56,7 +56,6 @@ abstract class ListCrawler implements ListInterface
             $url = $node->link()->getUri();
 
             if ($this->detailCrawler->isDetailUrl($url)) {
-                echo $url.PHP_EOL;
                 $this->detailCrawler->start($url);
             }
 
