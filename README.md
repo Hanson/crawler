@@ -14,34 +14,53 @@ This package require [Goutte](https://github.com/FriendsOfPHP/Goutte), you can g
 
 ### example
 
+```
+        //or $listCrawler = new ExampleListCrawler(storage_path('logs'));
+        $listCrawler = new ExampleListCrawler('http://example.com', storage_path('logs'));
+        $listCrawler->setDetailCrawler(new ExampleDetailCrawler());
+        $listCrawler->start();
+```
+
 #### ListCrawler
-list extend Hanccc/ListCrawler
+
 
 ```
+class ExampleListCrawler extends ListCrawler{
+    public $url = 'http://example.com';
+    
     //return links per page
-    public function getEachPageUrl($page);
-```
-```
+    public function getEachPageUrl($page)
+    {
+        return 'http://example.com/list&page=' . $page;
+    }
+    
     // get the maximum number of pages
     public function setMaxPage()
     {
         $this->maxPage = $num;
     }
+}
+
 ```
 
 #### DetailCrawler
-detail extend Hanccc/DetailCrawler
 
 ```
-    //Returns whether URL parameters detail page
-    public function isDetailUrl($url);
-```
-```
+class ExampleDetailCrawler extends DetailCrawler{
+
+    //Returns boolean
+    public function isDetailUrl($url)
+    {
+        if(preg_match('/example.com\/id(\d+)/, $url))
+            return true;
+    }
+    
     // what you want to do about the detail page
     public function handle()
     {
         echo $this->crawler->filter('title')->text();
     }
+}
 ```
 
 
