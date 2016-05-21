@@ -13,6 +13,8 @@ require_once __DIR__ . './../vendor/autoload.php';
 class YgdyListCrawler extends \Hanccc\ListCrawler
 {
 
+    public $url = 'http://www.ygdy8.net/html/gndy/dyzz/';
+
     /**
      * @param $page int
      * @return string
@@ -49,7 +51,7 @@ class YgdyDetailCrawler extends \Hanccc\DetailCrawler
 class Example
 {
     function test(){
-        $listCrawler = new YgdyListCrawler('http://2.hanc.cc/wef', __DIR__ . '/');
+        $listCrawler = new YgdyListCrawler(__DIR__ . '/');
         $listCrawler->setDetailCrawler(new YgdyDetailCrawler());
         $listCrawler->start();
     }

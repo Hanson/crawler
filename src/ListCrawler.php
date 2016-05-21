@@ -14,19 +14,23 @@ use Goutte\Client;
 abstract class ListCrawler implements ListInterface
 {
     use Crawler;
-    
+
     public $client;
 
     public $maxPage;
 
+    public $url;
+
     /** @var  $detailCrawler DetailCrawler */
     public $detailCrawler;
 
-    public function __construct($url, $logPath)
+    public function __construct()
     {
+        $args = func_get_args();
+        $argNum = func_num_args();
         $this->client = new Client();
-        $this->logPath = $logPath;
-        $this->crawl($url);
+        $this->logPath = $argNum == 1 ? $args[0] : $args[1];
+        $this->crawl($argNum == 1 ? $this->url : $args[0]);
     }
 
     public function setDetailCrawler(DetailCrawler $detailCrawler)
@@ -37,7 +41,7 @@ abstract class ListCrawler implements ListInterface
     public function start()
     {
         $this->setMaxPage();
-        
+
         $this->iterateUrls();
     }
 
