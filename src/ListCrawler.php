@@ -21,6 +21,8 @@ abstract class ListCrawler implements ListInterface
 
     public $url;
 
+    public $detailUrls;
+
     /** @var  $detailCrawler DetailCrawler */
     public $detailCrawler;
 
@@ -59,7 +61,8 @@ abstract class ListCrawler implements ListInterface
         $this->crawler->filter('a')->each(function ($node) {
             $url = $node->link()->getUri();
 
-            if ($this->detailCrawler->isDetailUrl($url)) {
+            if ($this->detailCrawler->isDetailUrl($url) && !in_array($url, $this->detailUrls)) {
+                $this->detailUrls[] = $url;
                 $this->detailCrawler->start($url);
             }
 
