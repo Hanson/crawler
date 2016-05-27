@@ -21,7 +21,7 @@ abstract class ListCrawler implements ListInterface
 
     public $url;
 
-    public $detailUrls;
+    public $detailUrls = [];
 
     /** @var  $detailCrawler DetailCrawler */
     public $detailCrawler;
