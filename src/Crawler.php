@@ -9,6 +9,8 @@
 namespace Hanccc;
 
 
+use Goutte\Client;
+
 trait Crawler
 {
     public $client;
@@ -18,6 +20,14 @@ trait Crawler
     public $logPath;
     
     public $url;
+
+    public function initClient($option)
+    {
+        if(!is_array($option))
+            throw new \Exception('option must be array!');
+
+        $this->client = new Client($option);
+    }
 
     public function crawl($url)
     {

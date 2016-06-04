@@ -28,6 +28,7 @@ abstract class ListCrawler implements ListInterface
 
     public function __construct()
     {
+        set_time_limit(0);
         $args = func_get_args();
         $argNum = func_num_args();
         $this->client = new Client();
