@@ -19,8 +19,6 @@ abstract class ListCrawler implements ListInterface
 
     public $maxPage;
 
-    public $url;
-
     public $detailUrls = [];
 
     /** @var  $detailCrawler DetailCrawler */
