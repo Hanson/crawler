@@ -46,7 +46,7 @@ abstract class ListCrawler implements ListInterface
         $this->iterateUrls();
     }
 
-    public function iterateUrls()
+    protected function iterateUrls()
     {
         for ($i = 0; $i < $this->getMaxPage(); $i++) {
             $url = $this->getEachPageUrl($i);
@@ -55,7 +55,7 @@ abstract class ListCrawler implements ListInterface
         }
     }
 
-    public function crawlDetailUrl()
+    protected function crawlDetailUrl()
     {
         $this->crawler->filter('a')->each(function ($node) {
             $url = $node->link()->getUri();
@@ -68,7 +68,7 @@ abstract class ListCrawler implements ListInterface
         });
     }
 
-    public function getMaxPage()
+    protected function getMaxPage()
     {
         if ($this->maxPage < 1)
             throw new \Exception('最大页数不能小于1');
