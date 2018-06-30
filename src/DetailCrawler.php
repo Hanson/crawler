@@ -13,7 +13,7 @@ use Goutte\Client;
 
 abstract class DetailCrawler implements DetailInterface
 {
-    use Crawler;
+    use Crawler1;
 
     public function __construct()
     {

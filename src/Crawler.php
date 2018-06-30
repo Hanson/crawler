@@ -1,66 +1,98 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: hanson
- * Date: 16-5-18
- * Time: 下午7:25
- */
-
-namespace Hanccc;
 
 
-use Goutte\Client;
+namespace Hanson\Crawler;
 
-trait Crawler
+
+use Closure;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+
+class Crawler
 {
-    public $client;
 
-    public $crawler;
-    
-    public $logPath;
-    
-    public $url;
+    protected $client;
 
-    public function initClient($option)
+    protected $config;
+
+    protected $pageNum;
+
+    protected $currentUrl;
+
+    public $currentContent;
+
+    protected $eachListCallback;
+
+    public function __construct(array $config)
     {
-        if(!is_array($option))
-            throw new \Exception('option must be array!');
+        $this->config = $config;
 
-        $this->client = new Client($option);
+        $this->client = new Client([
+//            'timeout' => 2,
+        ]);
+
+        echo 'ready';
+        print_r($this->crawl($config['url']));
+        echo 'finish';
+    }
+
+    /**
+     * @throws CrawlerException
+     */
+    public function run()
+    {
+        if (!$this->pageNum && is_int($this->pageNum)) {
+            throw new CrawlerException('页数不正确');
+        }
+
+        for ($page = 0; $page < $this->pageNum; $page++) {
+            $url = $this->getEachListUrl($page);
+
+            echo $url . PHP_EOL;
+//            $this->crawl($url);
+//            $this->crawlDetailUrl();
+        }
     }
 
     public function crawl($url)
     {
+        echo $url;
         try{
-            $this->url = $url;
-            return $this->crawler = $this->client->request('get', $url);
-        }catch (\Exception $e){
-            $this->exceptionHandle($url, $e);
+            $this->currentUrl = $url;
+
+            $response = $this->client->request('get', $url);
+        } catch (GuzzleException $e) {
+            print_r($e->getMessage());
+            return null;
         }
-    }
-    
-    private function getLogPath(){
-        return $this->logPath;
+
+        $this->currentContent = (string) $response->getBody();
+
+        $response->getBody()->close();
+
+        return $this->currentContent;
     }
 
     /**
-     * @param $url
-     * @param $e \Exception
-     * @throws \Exception
+     * 设置总页数
+     *
+     * @param Closure $callback
      */
-    private function exceptionHandle($url, $e)
+    public function setPageNum(Closure $callback)
     {
-        if(!$this->client->getResponse()){
-            Log::getInstance(Log::ERROR, $this->getLogPath())->addError($url . ' : ' . $e->getMessage());
-            throw new \Exception('response is null!');
-        }
-            
-        if($this->client->getResponse()->getStatus() == 200){
-            $this->crawl($url);
-            Log::getInstance(Log::DEBUG, $this->getLogPath())->addDebug($url);
-        } else{
-            Log::getInstance(Log::ERROR, $this->getLogPath())->addError($url . ' : ' . $e->getMessage());  
-        }
+        $this->pageNum = $callback($this);
+
+        echo $this->pageNum;
+    }
+
+    public function getEachListUrl($page)
+    {
+        return call_user_func($this->eachListCallback, [$page]);
+    }
+
+    public function setEachListUrl(Closure $callback)
+    {
+        return $this->eachListCallback = $callback;
     }
 
 }

@@ -13,7 +13,7 @@ use Goutte\Client;
 
 abstract class ListCrawler implements ListInterface
 {
-    use Crawler;
+    use Crawler1;
 
     public $client;
 
